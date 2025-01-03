@@ -6,6 +6,8 @@ A standalone, lightweight web-based control interface for [Volumio](https://volu
 
 Volumio's native UI is not reverse-proxy compatible. This project solves that limitation by offering a simplified and extensible control interface that communicates with Volumio's REST API.
 
+![Volumio Web Control Proxy Interface](docs/screenshots/screenshot1.png)
+
 ### Features
 
 - **Playback Controls:** Play, pause, stop, next, previous, and volume control.
@@ -102,7 +104,7 @@ We welcome contributions! Please open issues or submit pull requests for:
 
 ### License
 
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/foonerd/volumio-web-control-proxy/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
