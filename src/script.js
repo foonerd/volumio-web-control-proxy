@@ -23,8 +23,9 @@ async function playPlaylist() {
     }
     try {
         console.log(`Playing playlist: ${playlist}`);
-        await fetch(`${API_BASE}/commands/?cmd=playplaylist&name=${encodeURIComponent(playlist)}`);
+        const response = await fetch(`${API_BASE}/commands/?cmd=playplaylist&name=${encodeURIComponent(playlist)}`);
         fetchQueue(); // Refresh queue after playing
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     } catch (error) {
         console.error(`Error playing playlist "${playlist}":`, error);
     }
