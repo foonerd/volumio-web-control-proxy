@@ -142,23 +142,9 @@ async function addToQueueAndPlay(uri, title = 'Unknown Item') {
         if (result.response !== 'success') {
             console.error('Failed to add to queue and play:', result);
         }
+        fetchVolumioState(); // Refresh state after playing
     } catch (error) {
         console.error('Error adding to queue and playing:', error);
-    }
-}
-
-// Fetch and display the playback queue
-async function fetchQueue() {
-    try {
-        const response = await fetch(`${API_BASE}/getQueue`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const queue = await response.json();
-        const queueList = document.getElementById('queueList');
-        queueList.innerHTML = queue.queue.map(
-            track => `<li>${track.name || 'Unknown'} - ${track.artist || 'Unknown Artist'}</li>`
-        ).join('');
-    } catch (error) {
-        console.error('Error fetching queue:', error);
     }
 }
 
@@ -174,6 +160,14 @@ async function fetchVolumioState() {
         document.getElementById('artist').innerText = state.artist || '';
         const albumArt = state.albumart || 'default-album-art.jpg';
         document.getElementById('albumart').src = albumArt.startsWith('http') ? albumArt : `http://${location.host}${albumArt}`;
+
+        // Update play/pause button icon
+        const playPauseIcon = document.getElementById('playPauseIcon');
+        if (state.status === 'play') {
+            playPauseIcon.innerText = 'pause';
+        } else {
+            playPauseIcon.innerText = 'play_arrow';
+        }
     } catch (error) {
         console.error('Error fetching Volumio state:', error);
     }
@@ -191,6 +185,52 @@ async function sendCommand(command) {
     }
 }
 
+// Toggle play/stop for web radio and play/pause for local tracks
+async function togglePlayPause() {
+    try {
+        const stateResponse = await fetch(`${API_BASE}/getState`);
+        if (!stateResponse.ok) throw new Error(`HTTP error! Status: ${stateResponse.status}`);
+        const state = await stateResponse.json();
+
+        if (state.service === 'webradio') {
+            if (state.status === 'play') {
+                console.log('Stopping web radio');
+                await sendCommand('stop');
+            } else if (state.status === 'stop') {
+                console.log('Starting web radio playback');
+                if (state.uri) {
+                    const payload = [
+                        {
+                            uri: state.uri,
+                            service: 'webradio',
+                            type: 'webradio',
+                            title: state.title || 'Web Radio',
+                        },
+                    ];
+                    await fetch(`${API_BASE}/replaceAndPlay`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ list: payload, index: 0 }),
+                    });
+                } else {
+                    console.warn('No URI available to play web radio.');
+                }
+            }
+        } else {
+            // Handle local tracks (play/pause)
+            if (state.status === 'play') {
+                console.log('Pausing playback');
+                await sendCommand('pause');
+            } else {
+                console.log('Resuming playback');
+                await sendCommand('play');
+            }
+        }
+    } catch (error) {
+        console.error('Error toggling play/pause:', error);
+    }
+}
+
 // Set playback volume
 async function setVolume(value) {
     try {
@@ -199,6 +239,21 @@ async function setVolume(value) {
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     } catch (error) {
         console.error('Error setting volume:', error);
+    }
+}
+
+// Fetch and display the playback queue
+async function fetchQueue() {
+    try {
+        const response = await fetch(`${API_BASE}/getQueue`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const queue = await response.json();
+        const queueList = document.getElementById('queueList');
+        queueList.innerHTML = queue.queue.map(
+            track => `<li>${track.name || 'Unknown'} - ${track.artist || 'Unknown Artist'}</li>`
+        ).join('');
+    } catch (error) {
+        console.error('Error fetching queue:', error);
     }
 }
 

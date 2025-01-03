@@ -35,11 +35,8 @@
                 <button onclick="sendCommand('prev')" title="Previous">
                     <i class="material-icons">skip_previous</i>
                 </button>
-                <button onclick="sendCommand('pause')" title="Pause">
-                    <i class="material-icons">pause</i>
-                </button>
-                <button onclick="sendCommand('play')" title="Play">
-                    <i class="material-icons">play_arrow</i>
+                <button onclick="togglePlayPause()" title="Play/Pause">
+                    <i class="material-icons" id="playPauseIcon">play_arrow</i>
                 </button>
                 <button onclick="sendCommand('stop')" title="Stop">
                     <i class="material-icons">stop</i>
