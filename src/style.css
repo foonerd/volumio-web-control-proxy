@@ -1,0 +1,226 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #282c34;
+    color: #ffffff;
+    line-height: 1.6;
+    text-align: center; /* Center-align all main content */
+}
+
+/* Header */
+header {
+    background-color: #47B072;
+    color: #ffffff;
+    padding: 1rem 0;
+}
+
+header .logo {
+    width: 10vw;
+    max-width: 100px;
+    margin-bottom: 0.5rem;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Space between navigation links */
+    margin: 1rem 0;
+    background-color: #3b3f46;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #47B072;
+    color: #282c34;
+}
+
+/* Sections */
+section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #3b3f46;
+    border-radius: 8px;
+    text-align: center;
+    width: 90%; /* Ensure responsiveness */
+    max-width: 800px; /* Limit maximum width */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Section Headings */
+section h2 {
+    color: #47B072;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Playback Controls Section */
+.playback-controls {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center;
+    gap: 1.5rem; /* Space between buttons and volume control */
+}
+
+.playback-controls .controls {
+    display: flex;
+    gap: 1rem; /* Space between buttons */
+}
+
+.playback-controls button {
+    margin: 0.5rem;
+    padding: 0.6rem;
+    background-color: transparent;
+    color: #47B072;
+    border: 2px solid #47B072;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.playback-controls button:hover {
+    background-color: #47B072;
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+/* Volume Control */
+.volume-control {
+    display: flex;
+    flex-direction: column; /* Stack slider and text vertically */
+    align-items: center;
+    gap: 0.5rem; /* Space between slider and label */
+}
+
+.volume-control input[type="range"] {
+    width: 300px;
+    height: 8px;
+    background: #47B072;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #47B072;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Now Playing Section */
+.now-playing .album-art {
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+/* Dropdown and Buttons */
+.styled-select, .styled-button {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.styled-select {
+    background-color: #3b3f46;
+    color: #ffffff;
+    border: 2px solid #47B072;
+}
+
+.styled-button {
+    background-color: #47B072;
+    color: #ffffff;
+    border: none;
+}
+
+.styled-button:hover {
+    background-color: #3e9d61;
+    transform: scale(1.05);
+}
+
+/* Browse Results Section */
+#browseResults ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#browseResults li {
+    display: grid;
+    grid-template-columns: 80px 80px auto; /* Fixed-width columns for alignment */
+    gap: 1rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #444;
+}
+
+#browseResults li span {
+    text-align: left;
+    color: #ffffff;
+}
+
+#browseResults li:last-child {
+    border-bottom: none;
+}
+
+/* Buttons in Results */
+#browseResults li button {
+    padding: 0.4rem 0.8rem;
+    background-color: #47B072;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#browseResults li button:hover {
+    background-color: #3e9d61;
+    transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+    margin-top: 2rem;
+    padding: 1rem 0;
+    background-color: #3b3f46;
+    color: #ffffff;
+    font-size: 0.9rem;
+}

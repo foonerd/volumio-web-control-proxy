@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volumio Control</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <img src="volumio-logo.png" alt="Volumio Logo" class="logo">
+        <h1>Volumio Control Panel</h1>
+    </header>
+
+    <nav>
+        <a href="#now-playing">Now Playing</a>
+        <a href="#playlists">Playlists</a>
+        <a href="#sources">Sources</a>
+        <a href="#queue">Queue</a>
+    </nav>
+
+    <main>
+        <section id="now-playing" class="now-playing">
+            <h2>Now Playing</h2>
+            <img id="albumart" src="default-album-art.jpg" alt="Album Art" class="album-art">
+            <p><strong>Title:</strong> <span id="title">No Track Playing</span></p>
+            <p><strong>Artist:</strong> <span id="artist"></span></p>
+        </section>
+
+        <section id="playback-controls" class="playback-controls">
+            <h2>Playback Controls</h2>
+            <div class="controls">
+                <button onclick="sendCommand('prev')" title="Previous">
+                    <i class="material-icons">skip_previous</i>
+                </button>
+                <button onclick="sendCommand('pause')" title="Pause">
+                    <i class="material-icons">pause</i>
+                </button>
+                <button onclick="sendCommand('play')" title="Play">
+                    <i class="material-icons">play_arrow</i>
+                </button>
+                <button onclick="sendCommand('stop')" title="Stop">
+                    <i class="material-icons">stop</i>
+                </button>
+                <button onclick="sendCommand('next')" title="Next">
+                    <i class="material-icons">skip_next</i>
+                </button>
+            </div>
+            <div class="volume-control">
+                <h3>Volume</h3>
+                <input type="range" id="volume" min="0" max="100" oninput="setVolume(this.value)">
+                <span id="volumeValue">50</span>
+            </div>
+        </section>
+
+        <section id="playlists" class="playlists">
+            <h2>Playlists</h2>
+            <select id="playlistSelect" class="styled-select">
+                <option>Loading Playlists...</option>
+            </select>
+            <button onclick="playPlaylist()" class="styled-button">Play Playlist</button>
+        </section>
+
+        <section id="sources" class="sources">
+            <h2>Sources</h2>
+            <select id="sourceSelect" class="styled-select">
+                <option>Loading Sources...</option>
+            </select>
+            <button onclick="browseSource()" class="styled-button">Browse Source</button>
+        </section>
+
+        <section id="browseResults" class="browse-results">
+            <h2>Browse Results</h2>
+            <p>Select a source from above and navigate its contents.</p>
+        </section>
+
+        <section id="queue" class="queue">
+            <h2>Playback Queue</h2>
+            <ul id="queueList">
+                <li>Queue is empty</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>Powered by <strong>Volumio</strong></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
