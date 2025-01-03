@@ -21,6 +21,14 @@ Volumio's native UI is not reverse-proxy compatible. This project solves that li
 
 ---
 
+### Project Goals
+
+- **Ease of Use:** Simplified UI for key Volumio functions.
+- **Customizability:** Fully customizable HTML, CSS, and JS.
+- **Future Development:** Extensible architecture to incorporate advanced API features.
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -30,7 +38,7 @@ Volumio's native UI is not reverse-proxy compatible. This project solves that li
 
 ---
 
-### Installation
+## Installation
 
 #### Option 1: Using a Web Server
 
@@ -77,20 +85,56 @@ Volumio's native UI is not reverse-proxy compatible. This project solves that li
 
 ---
 
-#### Optional: Reverse Proxy Configuration
+## Configuration
 
-- **Apache:** Use `server/apache/volumio.conf`.
-- **Nginx:** Use `server/nginx/volumio.conf`.
+### Setting Up Reverse Proxy
 
-Update the `ProxyPass` and `ProxyPassReverse` directives with your Volumio IP and port.
+This project includes configuration files for both Apache and Nginx to serve the web control interface.
 
----
+#### Placeholder `<volumio_ip>`
 
-### Project Goals
+The `<volumio_ip>` placeholder in the `volumio.conf` files must be replaced with the IP address of your Volumio device. This allows the reverse proxy to forward API requests to the Volumio device.
 
-- **Ease of Use:** Simplified UI for key Volumio functions.
-- **Customizability:** Fully customizable HTML, CSS, and JS.
-- **Future Development:** Extensible architecture to incorporate advanced API features.
+To find your Volumio device's IP address, you can:
+
+1. Check your router's connected devices list.
+2. Use a network scanner like `nmap`.
+3. Access Volumio's settings through its native interface, where the IP address is displayed.
+
+For example:
+
+```nginx
+proxy_pass http://192.168.1.100:3000;  # Replace 192.168.1.100 with your Volumio IP
+```
+
+```apache
+ProxyPass /api/v1 http://192.168.1.100:3000/api/v1
+ProxyPassReverse /api/v1 http://192.168.1.100:3000/api/v1
+```
+
+#### Configuring and Enabling the Reverse Proxy
+
+1. Update the `<volumio_ip>` placeholder in the configuration file.
+2. Copy the configuration file to your server's configuration directory:
+   - **Apache**: `/etc/apache2/sites-available/volumio.conf`
+   - **Nginx**: `/etc/nginx/sites-available/volumio.conf`
+3. Enable the site:
+   ```bash
+   # Apache
+   sudo a2ensite volumio.conf
+   sudo systemctl reload apache2
+   
+   # Nginx
+   sudo ln -s /etc/nginx/sites-available/volumio.conf /etc/nginx/sites-enabled/
+   sudo systemctl reload nginx
+   ```
+4. Test your setup by navigating to the URL or IP where your proxy is hosted.
+
+## Usage
+
+1. Open the web interface in your browser.
+2. Use the navigation menu to switch between "Now Playing", "Playlists", "Sources", and "Queue".
+3. Enjoy controlling your Volumio device!
 
 ---
 
