@@ -6,7 +6,9 @@ A standalone, lightweight web-based control interface for [Volumio](https://volu
 
 Volumio's native UI is not reverse-proxy compatible. This project solves that limitation by offering a simplified and extensible control interface that communicates with Volumio's REST API.
 
-![Volumio Web Control Proxy Interface](docs/screenshots/screenshot1.png)
+<p align="center">
+  <img src="docs/screenshots/screenshot1.png" alt="Volumio Web Control Proxy Interface" width="75%">
+</p>
 
 ### Features
 
