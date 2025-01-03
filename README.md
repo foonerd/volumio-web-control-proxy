@@ -152,3 +152,20 @@ volumio-web-control-proxy/
 3. **Theme Customization:** Allow users to choose between light and dark themes or customize colors.
 4. **Mobile Optimization:** Improve responsiveness for seamless mobile experience.
 5. **Third-Party Plugins:** Add support for popular third-party plugins via the interface.
+
+---
+
+## Versioning Information
+
+- **Project Version:** 1.0.0
+- **Compatible Volumio Versions:** 3.x and above
+
+### Changelog
+
+#### v1.0.0
+- Initial release with:
+  - Playback controls
+  - Source browsing
+  - Playlist support
+  - Web radio support
+  - Docker and reverse proxy configuration
