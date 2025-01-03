@@ -5,6 +5,7 @@ async function fetchPlaylists() {
     const playlistSelect = document.getElementById('playlistSelect');
     try {
         const response = await fetch(`${API_BASE}/listplaylists`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const playlists = await response.json();
         playlistSelect.innerHTML = playlists.map(name => `<option value="${name}">${name}</option>`).join('');
     } catch (error) {
@@ -34,6 +35,7 @@ async function fetchSources() {
     const sourceSelect = document.getElementById('sourceSelect');
     try {
         const response = await fetch(`${API_BASE}/browse`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         sourceSelect.innerHTML = data.navigation.lists
             .map(source => `<option value="${source.uri}">${source.name}</option>`)
@@ -54,6 +56,7 @@ async function browseSource() {
     try {
         console.log(`Browsing source: ${source}`);
         const response = await fetch(`${API_BASE}/browse?uri=${encodeURIComponent(source)}`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
 
         if (data.navigation && data.navigation.lists) {
@@ -107,6 +110,7 @@ async function navigateSource(uri) {
     try {
         console.log(`Navigating source: ${uri}`);
         const response = await fetch(`${API_BASE}/browse?uri=${encodeURIComponent(uri)}`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         renderBrowseResults(data.navigation.lists);
     } catch (error) {
@@ -127,16 +131,15 @@ async function addToQueueAndPlay(uri, title = 'Unknown Item') {
 
     try {
         console.log(`Adding to queue: ${uri}`);
-        const addResponse = await fetch(`${API_BASE}/replaceAndPlay`, {
+        const response = await fetch(`${API_BASE}/replaceAndPlay`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ list: payload, index: 0 })
         });
-        const addResult = await addResponse.json();
-        if (addResult.response !== 'success') {
-            console.error('Failed to add to queue and play:', addResult);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const result = await response.json();
+        if (result.response !== 'success') {
+            console.error('Failed to add to queue and play:', result);
         }
     } catch (error) {
         console.error('Error adding to queue and playing:', error);
@@ -147,6 +150,7 @@ async function addToQueueAndPlay(uri, title = 'Unknown Item') {
 async function fetchQueue() {
     try {
         const response = await fetch(`${API_BASE}/getQueue`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const queue = await response.json();
         const queueList = document.getElementById('queueList');
         queueList.innerHTML = queue.queue.map(
@@ -161,6 +165,7 @@ async function fetchQueue() {
 async function fetchVolumioState() {
     try {
         const response = await fetch(`${API_BASE}/getState`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const state = await response.json();
 
         // Update now-playing section
@@ -177,7 +182,8 @@ async function fetchVolumioState() {
 async function sendCommand(command) {
     try {
         console.log(`Sending command: ${command}`);
-        await fetch(`${API_BASE}/commands/?cmd=${command}`);
+        const response = await fetch(`${API_BASE}/commands/?cmd=${command}`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         fetchVolumioState(); // Refresh state after command
     } catch (error) {
         console.error(`Error sending command "${command}":`, error);
@@ -188,7 +194,8 @@ async function sendCommand(command) {
 async function setVolume(value) {
     try {
         document.getElementById('volumeValue').innerText = value;
-        await fetch(`${API_BASE}/commands/?cmd=volume&volume=${value}`);
+        const response = await fetch(`${API_BASE}/commands/?cmd=volume&volume=${value}`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     } catch (error) {
         console.error('Error setting volume:', error);
     }
