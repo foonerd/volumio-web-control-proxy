@@ -22,6 +22,7 @@
     </nav>
 
     <main>
+        <!-- Now Playing Section -->
         <section id="now-playing" class="now-playing">
             <h2>Now Playing</h2>
             <img id="albumart" src="default-album-art.jpg" alt="Album Art" class="album-art">
@@ -29,17 +30,18 @@
             <p><strong>Artist:</strong> <span id="artist"></span></p>
         </section>
 
+        <!-- Playback Controls Section -->
         <section id="playback-controls" class="playback-controls">
             <h2>Playback Controls</h2>
             <div class="controls">
                 <button onclick="sendCommand('prev')" title="Previous">
                     <i class="material-icons">skip_previous</i>
                 </button>
-                <button onclick="togglePlayPause()" title="Play/Pause">
-                    <i class="material-icons" id="playPauseIcon">play_arrow</i>
-                </button>
                 <button onclick="sendCommand('stop')" title="Stop">
                     <i class="material-icons">stop</i>
+                </button>
+                <button id="playPauseButton" onclick="sendCommand('toggle')" title="Play/Pause">
+                    <i id="playPauseIcon" class="material-icons">play_arrow</i>
                 </button>
                 <button onclick="sendCommand('next')" title="Next">
                     <i class="material-icons">skip_next</i>
@@ -52,6 +54,7 @@
             </div>
         </section>
 
+        <!-- Playlists Section -->
         <section id="playlists" class="playlists">
             <h2>Playlists</h2>
             <select id="playlistSelect" class="styled-select">
@@ -60,6 +63,7 @@
             <button onclick="playPlaylist()" class="styled-button">Play Playlist</button>
         </section>
 
+        <!-- Sources Section -->
         <section id="sources" class="sources">
             <h2>Sources</h2>
             <select id="sourceSelect" class="styled-select">
@@ -68,11 +72,13 @@
             <button onclick="browseSource()" class="styled-button">Browse Source</button>
         </section>
 
+        <!-- Browse Results Section -->
         <section id="browseResults" class="browse-results">
             <h2>Browse Results</h2>
             <p>Select a source from above and navigate its contents.</p>
         </section>
 
+        <!-- Playback Queue Section -->
         <section id="queue" class="queue">
             <h2>Playback Queue</h2>
             <ul id="queueList">

@@ -1,20 +1,58 @@
 const API_BASE = '/api/v1';
 
-// Fetch playlists
-async function fetchPlaylists() {
-    const playlistSelect = document.getElementById('playlistSelect');
+/**
+ * A generic wrapper for making API requests with consistent error handling.
+ * @param {string} endpoint - The API endpoint to call.
+ * @param {object} options - Additional fetch options like method, headers, and body.
+ * @returns {Promise<any>} - The JSON-parsed response from the API.
+ */
+async function apiFetch(endpoint, options = {}) {
     try {
-        const response = await fetch(`${API_BASE}/listplaylists`);
+        const response = await fetch(`${API_BASE}${endpoint}`, options);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const playlists = await response.json();
-        playlistSelect.innerHTML = playlists.map(name => `<option value="${name}">${name}</option>`).join('');
+        return await response.json();
     } catch (error) {
-        console.error('Error fetching playlists:', error);
+        console.error(`Error fetching ${endpoint}:`, error);
+        throw error;
+    }
+}
+
+// Caching playlists to avoid redundant network requests.
+let cachedPlaylists = null;
+
+/**
+ * Fetches the list of available playlists from the API and populates the dropdown.
+ * @param {boolean} refresh - If true, forces fetching from the server instead of using cache.
+ */
+async function fetchPlaylists(refresh = false) {
+    const playlistSelect = document.getElementById('playlistSelect');
+    if (!refresh && cachedPlaylists) {
+        populatePlaylists(cachedPlaylists);
+        return;
+    }
+    try {
+        const playlists = await apiFetch('/listplaylists');
+        cachedPlaylists = playlists;
+        populatePlaylists(playlists);
+    } catch {
         playlistSelect.innerHTML = '<option>Error Loading Playlists</option>';
     }
 }
 
-// Play a selected playlist
+/**
+ * Populates the playlist dropdown with the provided playlist names.
+ * @param {string[]} playlists - Array of playlist names.
+ */
+function populatePlaylists(playlists) {
+    const playlistSelect = document.getElementById('playlistSelect');
+    playlistSelect.innerHTML = playlists
+        .map(name => `<option value="${name}">${name}</option>`)
+        .join('');
+}
+
+/**
+ * Plays the selected playlist using the Volumio API.
+ */
 async function playPlaylist() {
     const playlist = document.getElementById('playlistSelect').value;
     if (!playlist) {
@@ -23,21 +61,20 @@ async function playPlaylist() {
     }
     try {
         console.log(`Playing playlist: ${playlist}`);
-        const response = await fetch(`${API_BASE}/commands/?cmd=playplaylist&name=${encodeURIComponent(playlist)}`);
-        fetchQueue(); // Refresh queue after playing
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        await apiFetch(`/commands/?cmd=playplaylist&name=${encodeURIComponent(playlist)}`);
+        fetchQueue(); // Refresh queue after playing.
     } catch (error) {
         console.error(`Error playing playlist "${playlist}":`, error);
     }
 }
 
-// Fetch and browse sources
+/**
+ * Fetches the available music sources from the API and populates the dropdown.
+ */
 async function fetchSources() {
     const sourceSelect = document.getElementById('sourceSelect');
     try {
-        const response = await fetch(`${API_BASE}/browse`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const data = await response.json();
+        const data = await apiFetch('/browse');
         sourceSelect.innerHTML = data.navigation.lists
             .map(source => `<option value="${source.uri}">${source.name}</option>`)
             .join('');
@@ -47,7 +84,9 @@ async function fetchSources() {
     }
 }
 
-// Browse a selected source
+/**
+ * Browses the selected music source and displays its contents.
+ */
 async function browseSource() {
     const source = document.getElementById('sourceSelect').value;
     if (!source) {
@@ -56,23 +95,18 @@ async function browseSource() {
     }
     try {
         console.log(`Browsing source: ${source}`);
-        const response = await fetch(`${API_BASE}/browse?uri=${encodeURIComponent(source)}`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const data = await response.json();
-
-        if (data.navigation && data.navigation.lists) {
-            renderBrowseResults(data.navigation.lists);
-        } else {
-            console.warn('Invalid response structure:', data);
-            document.getElementById('browseResults').innerHTML = '<p>No results found.</p>';
-        }
+        const data = await apiFetch(`/browse?uri=${encodeURIComponent(source)}`);
+        renderBrowseResults(data.navigation.lists);
     } catch (error) {
         console.error('Error browsing source:', error);
         document.getElementById('browseResults').innerHTML = '<p>Error Browsing Source</p>';
     }
 }
 
-// Render browse results dynamically
+/**
+ * Renders the results of browsing a music source dynamically in the UI.
+ * @param {Array} lists - Array of music source contents.
+ */
 function renderBrowseResults(lists) {
     const browseSection = document.getElementById('browseResults');
     browseSection.innerHTML = '';
@@ -102,7 +136,10 @@ function renderBrowseResults(lists) {
     });
 }
 
-// Navigate deeper into a source
+/**
+ * Navigates deeper into a music source hierarchy and displays its contents.
+ * @param {string} uri - URI of the music source to navigate into.
+ */
 async function navigateSource(uri) {
     if (!uri) {
         console.warn('Invalid URI for navigation.');
@@ -110,16 +147,18 @@ async function navigateSource(uri) {
     }
     try {
         console.log(`Navigating source: ${uri}`);
-        const response = await fetch(`${API_BASE}/browse?uri=${encodeURIComponent(uri)}`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const data = await response.json();
+        const data = await apiFetch(`/browse?uri=${encodeURIComponent(uri)}`);
         renderBrowseResults(data.navigation.lists);
     } catch (error) {
         console.error('Error navigating source:', error);
     }
 }
 
-// Add an item to queue and play
+/**
+ * Adds an item to the playback queue and starts playing it.
+ * @param {string} uri - URI of the item to add.
+ * @param {string} title - Title of the item to add.
+ */
 async function addToQueueAndPlay(uri, title = 'Unknown Item') {
     const payload = [
         {
@@ -129,141 +168,115 @@ async function addToQueueAndPlay(uri, title = 'Unknown Item') {
             title: title
         }
     ];
-
     try {
         console.log(`Adding to queue: ${uri}`);
-        const response = await fetch(`${API_BASE}/replaceAndPlay`, {
+        const result = await apiFetch('/replaceAndPlay', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ list: payload, index: 0 })
         });
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const result = await response.json();
         if (result.response !== 'success') {
             console.error('Failed to add to queue and play:', result);
         }
-        fetchVolumioState(); // Refresh state after playing
+        fetchVolumioState(); // Refresh state after playing.
     } catch (error) {
         console.error('Error adding to queue and playing:', error);
     }
 }
 
-// Fetch and display playback state
+/**
+ * Fetches the current playback state and updates the UI accordingly.
+ */
 async function fetchVolumioState() {
     try {
-        const response = await fetch(`${API_BASE}/getState`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const state = await response.json();
-
-        // Update now-playing section
+        const state = await apiFetch('/getState');
         document.getElementById('title').innerText = state.title || 'No Track Playing';
         document.getElementById('artist').innerText = state.artist || '';
         const albumArt = state.albumart || 'default-album-art.jpg';
         document.getElementById('albumart').src = albumArt.startsWith('http') ? albumArt : `http://${location.host}${albumArt}`;
-
-        // Update play/pause button icon
-        const playPauseIcon = document.getElementById('playPauseIcon');
-        if (state.status === 'play') {
-            playPauseIcon.innerText = 'pause';
-        } else {
-            playPauseIcon.innerText = 'play_arrow';
-        }
+        updatePlaybackControls(state.status);
     } catch (error) {
         console.error('Error fetching Volumio state:', error);
     }
 }
 
-// Send playback commands
+/**
+ * Updates the playback controls (e.g., play/pause icon) based on the playback status.
+ * @param {string} status - Current playback status (e.g., 'play', 'pause').
+ */
+function updatePlaybackControls(status) {
+    const playPauseIcon = document.getElementById('playPauseIcon');
+    if (status === 'play') {
+        playPauseIcon.innerText = 'pause';
+    } else {
+        playPauseIcon.innerText = 'play_arrow';
+    }
+}
+
+/**
+ * Sends a playback command (e.g., play, pause, stop) to the API.
+ * @param {string} command - The playback command to send.
+ */
 async function sendCommand(command) {
     try {
         console.log(`Sending command: ${command}`);
-        const response = await fetch(`${API_BASE}/commands/?cmd=${command}`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        fetchVolumioState(); // Refresh state after command
+        await apiFetch(`/commands/?cmd=${command}`);
+        fetchVolumioState(); // Refresh state after command.
     } catch (error) {
         console.error(`Error sending command "${command}":`, error);
     }
 }
 
-// Toggle play/stop for web radio and play/pause for local tracks
-async function togglePlayPause() {
-    try {
-        const stateResponse = await fetch(`${API_BASE}/getState`);
-        if (!stateResponse.ok) throw new Error(`HTTP error! Status: ${stateResponse.status}`);
-        const state = await stateResponse.json();
-
-        if (state.service === 'webradio') {
-            if (state.status === 'play') {
-                console.log('Stopping web radio');
-                await sendCommand('stop');
-            } else if (state.status === 'stop') {
-                console.log('Starting web radio playback');
-                if (state.uri) {
-                    const payload = [
-                        {
-                            uri: state.uri,
-                            service: 'webradio',
-                            type: 'webradio',
-                            title: state.title || 'Web Radio',
-                        },
-                    ];
-                    await fetch(`${API_BASE}/replaceAndPlay`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ list: payload, index: 0 }),
-                    });
-                } else {
-                    console.warn('No URI available to play web radio.');
-                }
-            }
-        } else {
-            // Handle local tracks (play/pause)
-            if (state.status === 'play') {
-                console.log('Pausing playback');
-                await sendCommand('pause');
-            } else {
-                console.log('Resuming playback');
-                await sendCommand('play');
-            }
-        }
-    } catch (error) {
-        console.error('Error toggling play/pause:', error);
-    }
-}
-
-// Set playback volume
-async function setVolume(value) {
-    try {
-        document.getElementById('volumeValue').innerText = value;
-        const response = await fetch(`${API_BASE}/commands/?cmd=volume&volume=${value}`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    } catch (error) {
-        console.error('Error setting volume:', error);
-    }
-}
-
-// Fetch and display the playback queue
+/**
+ * Fetches the current playback queue and updates the UI.
+ */
 async function fetchQueue() {
     try {
-        const response = await fetch(`${API_BASE}/getQueue`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const queue = await response.json();
+        const data = await apiFetch('/getQueue');
         const queueList = document.getElementById('queueList');
-        queueList.innerHTML = queue.queue.map(
-            track => `<li>${track.name || 'Unknown'} - ${track.artist || 'Unknown Artist'}</li>`
-        ).join('');
+        queueList.innerHTML = data.queue
+            .map(track => `<li>${track.name || 'Unknown'} - ${track.artist || 'Unknown Artist'}</li>`)
+            .join('');
     } catch (error) {
         console.error('Error fetching queue:', error);
     }
 }
 
-// Initialize the interface
+/**
+ * Debounced volume setting to prevent excessive API calls.
+ * @param {function} func - Function to debounce.
+ * @param {number} delay - Delay in milliseconds.
+ */
+function debounce(func, delay) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), delay);
+    };
+}
+
+/**
+ * Sets the playback volume using the API.
+ * @param {number} value - The volume value to set (0-100).
+ */
+const setVolume = debounce(async (value) => {
+    try {
+        document.getElementById('volumeValue').innerText = value;
+        await apiFetch(`/commands/?cmd=volume&volume=${value}`);
+    } catch (error) {
+        console.error('Error setting volume:', error);
+    }
+}, 300);
+
+/**
+ * Initializes the UI and starts periodic updates for playback state and queue.
+ */
 function initializeInterface() {
     fetchPlaylists();
     fetchSources();
     fetchVolumioState();
-    setInterval(fetchQueue, 5000); // Refresh queue every 5 seconds
-    setInterval(fetchVolumioState, 5000); // Refresh playback state every 5 seconds
+    setInterval(fetchQueue, 5000); // Refresh queue every 5 seconds.
+    setInterval(fetchVolumioState, 5000); // Refresh playback state every 5 seconds.
 }
 
 window.onload = initializeInterface;

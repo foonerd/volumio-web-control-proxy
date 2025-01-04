@@ -201,10 +201,15 @@ volumio-web-control-proxy/
 
 ## Versioning Information
 
-- **Project Version:** 1.0.0
+- **Project Version:** 1.0.1
 - **Compatible Volumio Versions:** 3.x and above
 
 ### Changelog
+
+#### v1.0.1
+- Improvements:
+  - Playback controls
+  - Volume state
 
 #### v1.0.0
 - Initial release with:
