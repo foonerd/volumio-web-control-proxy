@@ -210,6 +210,7 @@ volumio-web-control-proxy/
 - Improvements:
   - Playback controls
   - Volume state
+  - Style correction
 
 #### v1.0.0
 - Initial release with:

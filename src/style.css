@@ -109,26 +109,40 @@ section h2 {
 
 /* Volume Control */
 .volume-control {
-    display: flex;
+    display: flex; /* Align volume components horizontally */
     flex-direction: column; /* Stack slider and text vertically */
-    align-items: center;
+    align-items: center; /* Center align within the section */
     gap: 0.5rem; /* Space between slider and label */
+    margin-top: 1rem; /* Add some space from the playback controls */
 }
 
 .volume-control input[type="range"] {
-    width: 300px;
-    height: 8px;
-    background: #47B072;
-    border-radius: 5px;
+    width: 300px; /* Match the width of the playback buttons */
+    height: 8px; /* Make the slider bar slightly thicker */
+    background: #ffffff; /* White track for better visibility */
+    border-radius: 5px; /* Rounded edges for the slider track */
     outline: none;
     cursor: pointer;
     -webkit-appearance: none;
 }
 
 .volume-control input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
+    -webkit-appearance: none; /* Remove default thumb styling */
     appearance: none;
-    width: 20px;
+    width: 20px; /* Thumb size for easier interaction */
+    height: 20px;
+    background: #47B072; /* Green color for the thumb */
+    border-radius: 50%; /* Rounded thumb shape */
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2); /* Slightly enlarge thumb on hover */
+}
+
+.volume-control input[type="range"]::-moz-range-thumb {
+    width: 20px; /* Thumb size for Firefox */
     height: 20px;
     background: #47B072;
     border-radius: 50%;
@@ -136,8 +150,13 @@ section h2 {
     transition: transform 0.2s ease;
 }
 
-.volume-control input[type="range"]::-webkit-slider-thumb:hover {
+.volume-control input[type="range"]::-moz-range-thumb:hover {
     transform: scale(1.2);
+}
+
+.volume-control span {
+    font-size: 1rem; /* Match font size to the overall theme */
+    color: #ffffff; /* White color for visibility */
 }
 
 /* Now Playing Section */
