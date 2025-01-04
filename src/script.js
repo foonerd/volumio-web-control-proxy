@@ -269,6 +269,34 @@ const setVolume = debounce(async (value) => {
 }, 300);
 
 /**
+ * Switches between stylesheets based on user selection.
+ * Saves the user's preference to localStorage.
+ */
+function switchStyle() {
+    const themeStylesheet = document.getElementById('themeStylesheet');
+    const themeToggle = document.getElementById('themeToggle');
+    const selectedStyle = themeToggle.value;
+
+    themeStylesheet.setAttribute('href', selectedStyle);
+    localStorage.setItem('preferredStyle', selectedStyle); // Save preference
+    console.log(`Switched to ${selectedStyle}`);
+}
+
+/**
+ * Restores the user's preferred style from localStorage on page load.
+ */
+function loadPreferredStyle() {
+    const preferredStyle = localStorage.getItem('preferredStyle') || 'style.css'; // Default to style.css
+    const themeStylesheet = document.getElementById('themeStylesheet');
+    const themeToggle = document.getElementById('themeToggle');
+
+    themeStylesheet.setAttribute('href', preferredStyle);
+    if (themeToggle) {
+        themeToggle.value = preferredStyle;
+    }
+}
+
+/**
  * Initializes the UI and starts periodic updates for playback state and queue.
  */
 function initializeInterface() {

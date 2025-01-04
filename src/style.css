@@ -27,6 +27,25 @@ header h1 {
     font-size: 1.8rem;
 }
 
+/* Style Switch Dropdown */
+.style-switch {
+    margin: 0.5rem 0; /* Add some spacing above and below */
+    padding: 0.5rem; /* Inner padding */
+    font-size: 1rem; /* Match the font size of other UI elements */
+    border-radius: 5px; /* Rounded corners for modern look */
+    background-color: #3b3f46; /* Match the section background */
+    color: #ffffff; /* White text for contrast */
+    border: 2px solid #47B072; /* Green border for consistency */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+}
+
+.style-switch:hover {
+    background-color: #47B072; /* Highlight on hover */
+    color: #282c34; /* Darker text for contrast */
+    transform: scale(1.05); /* Slight zoom-in effect */
+}
+
 /* Navigation */
 nav {
     display: flex;

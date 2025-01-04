@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volumio Web Control Proxy</title>
-    <link rel="stylesheet" href="style.css">
+    <link id="themeStylesheet" rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
@@ -12,6 +12,10 @@
     <header>
         <img src="assets/volumio-logo.png" alt="Volumio Logo" class="logo">
         <h1>Volumio Web Control Proxy</h1>
+        <select id="themeToggle" class="style-switch" onchange="switchStyle()">
+            <option value="style.css">Default Style</option>
+            <option value="style_alt.css">Modern Style</option>
+        </select>
     </header>
 
     <nav>
