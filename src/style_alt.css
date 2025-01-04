@@ -1,0 +1,233 @@
+/* General Styles */
+/* Base styles for the entire page, including body and text settings */
+body {
+    font-family: 'Roboto', sans-serif; /* Modern sans-serif font */
+    margin: 0;
+    padding: 0;
+    background-color: #282c34; /* Dark background for contrast */
+    color: #ffffff; /* Light text for readability */
+    line-height: 1.6; /* Comfortable line spacing */
+}
+
+/* Header */
+/* Styles for the header section, including logo and title */
+header {
+    background-color: #47B072; /* Green theme color for branding */
+    color: #ffffff; /* White text for contrast */
+    padding: 1rem 0; /* Vertical spacing */
+    text-align: center; /* Centered text and elements */
+    border-bottom: 3px solid #3b3f46; /* Subtle separator below header */
+}
+
+header .logo {
+    width: 60px; /* Fixed logo size for consistency */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 0.5rem; /* Space below the logo */
+}
+
+header h1 {
+    margin: 0; /* Remove default margins */
+    font-size: 1.8rem; /* Slightly larger font for prominence */
+}
+
+/* Navigation */
+/* Top navigation bar styles for quick links */
+nav {
+    display: flex; /* Flexbox layout for horizontal alignment */
+    justify-content: center; /* Center all links */
+    gap: 1rem; /* Space between links */
+    padding: 1rem; /* Space inside the navigation bar */
+    background-color: #3b3f46; /* Slightly lighter than the background */
+    border-bottom: 1px solid #444; /* Thin separator */
+}
+
+nav a {
+    text-decoration: none; /* Remove underline from links */
+    color: #ffffff; /* White text for visibility */
+    font-weight: 500; /* Medium weight for better readability */
+    padding: 0.5rem 1rem; /* Spacing around links */
+    border-radius: 5px; /* Rounded corners for buttons */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+nav a:hover {
+    background-color: #47B072; /* Highlight on hover */
+    color: #282c34; /* Dark text for contrast on green */
+}
+
+/* Sections */
+/* Base styles for content sections */
+section {
+    margin: 2rem auto; /* Centered with spacing */
+    padding: 1.5rem; /* Inner padding for content */
+    background-color: #3b3f46; /* Slightly lighter for contrast */
+    border-radius: 10px; /* Rounded corners for modern look */
+    max-width: 800px; /* Limit width for better readability */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+section h2 {
+    color: #47B072; /* Theme color for headings */
+    font-size: 1.5rem; /* Large font for prominence */
+    margin-bottom: 1rem; /* Space below heading */
+}
+
+/* Now Playing */
+/* Styles specific to the "Now Playing" section */
+.now-playing .album-art {
+    width: 200px; /* Fixed size for album art */
+    height: 200px; /* Same height as width for square images */
+    border-radius: 10px; /* Rounded corners for a modern look */
+    object-fit: cover; /* Ensure image fits without distortion */
+    margin: 1rem auto; /* Centered with spacing */
+    display: block; /* Block display for consistent alignment */
+}
+
+.now-playing p {
+    margin: 0.5rem 0; /* Space between text lines */
+}
+
+/* Playback Controls */
+/* Styles for playback buttons and volume control */
+.playback-controls .controls {
+    display: flex; /* Flexbox for horizontal alignment */
+    justify-content: center; /* Center buttons */
+    align-items: center; /* Align vertically */
+    gap: 1rem; /* Space between buttons */
+    margin-bottom: 1rem; /* Space below controls */
+}
+
+.playback-controls button {
+    background-color: transparent; /* Transparent background */
+    border: 2px solid #47B072; /* Green border for theme consistency */
+    border-radius: 50%; /* Circular buttons */
+    width: 50px; /* Fixed size for uniformity */
+    height: 50px;
+    display: flex; /* Flexbox for centering icon */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Pointer cursor for interactivity */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover and click effects */
+    color: #47B072; /* Green color for the icons */
+}
+
+.playback-controls button:hover {
+    background-color: #47B072; /* Fill background on hover */
+    color: #ffffff; /* White icon for contrast */
+    transform: scale(1.1); /* Slight zoom-in effect */
+}
+
+.playback-controls .volume-control {
+    display: flex; /* Flexbox for alignment */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center horizontally */
+    gap: 1rem; /* Space between volume slider and label */
+}
+
+.playback-controls .volume-control input[type="range"] {
+    width: 100%; /* Full width for responsiveness */
+    max-width: 400px; /* Restrict max width */
+    height: 8px; /* Slider height for better grip */
+    background: linear-gradient(to right, #47B072, #3e9d61); /* Gradient track */
+    border-radius: 5px; /* Rounded edges */
+    outline: none; /* Remove default outline */
+    -webkit-appearance: none; /* Remove default browser styling */
+    cursor: pointer; /* Pointer cursor for interactivity */
+}
+
+.playback-controls .volume-control input[type="range"]::-webkit-slider-thumb {
+    width: 20px; /* Size of the thumb */
+    height: 20px;
+    background: #ffffff; /* White thumb for contrast */
+    border: 2px solid #47B072; /* Green border for theme */
+    border-radius: 50%; /* Circular thumb */
+    cursor: pointer; /* Pointer cursor */
+    transition: transform 0.2s ease, background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.playback-controls .volume-control input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2); /* Enlarge on hover */
+    background-color: #3e9d61; /* Slightly darker background */
+}
+
+/* Playlists and Sources */
+/* Styles for dropdowns and buttons in playlists and sources sections */
+.playlists select, .sources select {
+    width: 100%; /* Full width */
+    max-width: 400px; /* Limit maximum size */
+    margin: 0.5rem 0; /* Space around */
+    padding: 0.5rem; /* Inner padding */
+    background-color: #3b3f46; /* Dark background */
+    color: #ffffff; /* Light text */
+    border: 1px solid #47B072; /* Green border */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.styled-button {
+    background-color: #47B072; /* Theme color */
+    color: #ffffff; /* White text */
+    border: none; /* No border */
+    padding: 0.5rem 1rem; /* Comfortable padding */
+    font-size: 1rem; /* Standard font size */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+}
+
+.styled-button:hover {
+    background-color: #3e9d61; /* Darker green on hover */
+    transform: scale(1.05); /* Slight zoom-in effect */
+}
+
+/* Queue and Browse Results */
+/* Styles for queue list and browsing results */
+#queueList, #browseResults ul {
+    list-style: none; /* Remove default list styling */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
+#browseResults li {
+    display: grid;
+    grid-template-columns: 80px 80px auto; /* Fixed-width columns for alignment */
+    gap: 1rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #444;
+}
+
+#browseResults li span {
+    text-align: left;
+    color: #ffffff;
+}
+
+#browseResults li:last-child {
+    border-bottom: none;
+}
+
+/* Buttons in Results */
+#browseResults li button {
+    padding: 0.4rem 0.8rem;
+    background-color: #47B072;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#browseResults li button:hover {
+    background-color: #3e9d61;
+    transform: scale(1.05);
+}
+
+/* Footer */
+/* Footer styles for branding */
+footer {
+    text-align: center; /* Centered text */
+    padding: 1rem 0; /* Vertical padding */
+    background-color: #3b3f46; /* Dark background */
+    color: #ffffff; /* Light text */
+    font-size: 0.9rem; /* Smaller font size */
+    border-top: 3px solid #444; /* Top border for separation */
+}
