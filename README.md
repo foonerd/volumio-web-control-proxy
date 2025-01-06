@@ -171,9 +171,10 @@ volumio-web-control-proxy/
 │   ├── index.html
 │   ├── script.js
 │   ├── style.css
+│   ├── style_alt.css
+│   ├── favicon.ico
 │   ├── assets/
-│   │   ├── volumio-logo.png
-│   │   └── favicon.ico
+│   │   └── volumio-logo.png
 ├── docker/
 │   ├── Dockerfile
 │   ├── docker-compose.yml
